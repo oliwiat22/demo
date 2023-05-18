@@ -16,4 +16,8 @@ public class NewUserRequest {
   public String getPassword() {
     return password;
   }
+
+  public String setUsername() { return username; }
+
+  public String setPassword() {return password;}
 }
