@@ -21,7 +21,33 @@ class User {
     passwordAtrybut = password;
   }
 
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getUsernameAtrybut() {
+    return usernameAtrybut;
+  }
+
+  public void setUsernameAtrybut(String usernameAtrybut) {
+    this.usernameAtrybut = usernameAtrybut;
+  }
+
+  public String getPasswordAtrybut() {
+    return passwordAtrybut;
+  }
+
+  public void setPasswordAtrybut(String passwordAtrybut) {
+    this.passwordAtrybut = passwordAtrybut;
+  }
 }
+
+
 
 
 
