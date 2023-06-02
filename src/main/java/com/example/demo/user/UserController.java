@@ -1,12 +1,10 @@
 package com.example.demo.user;
 
 
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.PublicKey;
 import java.util.Optional;
 
 @RequestMapping("/user")
@@ -14,7 +12,7 @@ import java.util.Optional;
 public class UserController {
   UserRepository respository;
 
-@Autowired
+  @Autowired
   public UserController(UserRepository respository ) {
     this.respository = respository;
   }
@@ -26,30 +24,30 @@ public class UserController {
     return ResponseEntity.ok().build();
 
   }
-    @GetMapping("/get/{userId}")
-    ResponseEntity<User> getUser(@PathVariable Long userId) {
-      Optional<User> byId = this.respository.findById(userId);
-      if (byId.isPresent()) {
-        User user = byId.get();
-        return ResponseEntity.ok(user);
-      }
-      return ResponseEntity.notFound().build();
+  @GetMapping("/get/{userId}")
+  ResponseEntity<User> getUser(@PathVariable Long userId) {
+    Optional<User> byId = this.respository.findById(userId);
+    if (byId.isPresent()) {
+      User user = byId.get();
+      return ResponseEntity.ok(user);
     }
-    @PutMapping("/update/{userId}")
-    ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody UpdateUserRequest updatedUser) {
-      Optional<User> optionalUser = respository.findById(userId);
-      if (optionalUser.isPresent()) {
-        User user = optionalUser.get();
-        user.setUsernameAtrybut(updatedUser.getUsername());
-        user.setPasswordAtrybut(updatedUser.getPassword());
-        respository.save(user);
-        return ResponseEntity.ok().build();
-      }
-      return ResponseEntity.notFound().build();
+    return ResponseEntity.notFound().build();
+  }
+  @PutMapping("/update/{userId}")
+  ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody UpdateUserRequest updatedUser) {
+    Optional<User> optionalUser = respository.findById(userId);
+    if (optionalUser.isPresent()) {
+      User user = optionalUser.get();
+      user.setUsername(updatedUser.getUsername());
+      user.setPassword(updatedUser.getPassword());
+      respository.save(user);
+      return ResponseEntity.ok().build();
     }
+    return ResponseEntity.notFound().build();
+  }
 
-    @DeleteMapping("/delete/{userId}")
-    ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+  @DeleteMapping("/delete/{userId}")
+  ResponseEntity<?> deleteUser(@PathVariable Long userId) {
     Optional<User> optionalUser = respository.findById(userId);
     if (optionalUser.isPresent()) {
       User user = optionalUser.get();
@@ -57,5 +55,13 @@ public class UserController {
       return ResponseEntity.ok().build();
     }
     return  ResponseEntity.notFound().build();
-    }
+  }
+
+  @PostMapping(value = "/login")
+  ResponseEntity<LoggedUser> login(@RequestBody LogInUser user) {
+    User logged = respository.findByUsername(user.getUsername())
+        .orElseThrow(() -> new IllegalStateException("User not found"));
+    logged.checkPassword(user.getPassword());
+    return ResponseEntity.ok(logged.dto());
+  }
 }

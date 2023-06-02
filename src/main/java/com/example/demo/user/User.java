@@ -3,24 +3,31 @@ package com.example.demo.user;
 
 import jakarta.persistence.*;
 
-
 @Entity(name = "users")
-
 class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Long id;
-  String usernameAtrybut;
-  String passwordAtrybut;
+  String username;
+  String password;
 
   User() {
   }
 
   User(String username, String password) {
-    usernameAtrybut = username;
-    passwordAtrybut = password;
+    this.username = username;
+    this.password = password;
   }
 
+  void checkPassword(String password) {
+    if (password == null || !password.equals(this.password)) {
+      throw new IllegalStateException("Incorrect password");
+    }
+  }
+
+  LoggedUser dto() {
+    return new LoggedUser(id, username);
+  }
 
   public Long getId() {
     return id;
@@ -30,26 +37,21 @@ class User {
     this.id = id;
   }
 
-  public String getUsernameAtrybut() {
-    return usernameAtrybut;
+  public String getUsername() {
+    return username;
   }
 
-  public void setUsernameAtrybut(String usernameAtrybut) {
-    this.usernameAtrybut = usernameAtrybut;
+  public void setUsername(String username) {
+    this.username = username;
   }
 
-  public String getPasswordAtrybut() {
-    return passwordAtrybut;
+  public String getPassword() {
+    return password;
   }
 
-  public void setPasswordAtrybut(String passwordAtrybut) {
-    this.passwordAtrybut = passwordAtrybut;
+  public void setPassword(String password) {
+    this.password = password;
   }
 }
-
-
-
-
-
 
 
