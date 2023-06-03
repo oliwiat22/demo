@@ -7,22 +7,33 @@ import com.example.demo.item.dto.NewItem;
 import com.example.demo.item.exception.ItemNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ItemService {
 
   private ItemRepository itemRepository;
+  private ImageRepository imageRepository;
 
   @Autowired
-  public ItemService(ItemRepository itemRepository) {
+  public ItemService(ItemRepository itemRepository, ImageRepository imageRepository) {
     this.itemRepository = itemRepository;
+    this.imageRepository = imageRepository;
   }
 
-  public ItemDto addItem(NewItem newItem) {
-    final Item item = new Item(
-        newItem.getName(), newItem.getDescription(), newItem.getCategory(), newItem.getCompany(), newItem.getPrice()
-    );
-    return itemRepository.save(item).dto();
+  public ItemDto addItem(NewItem newItem, MultipartFile file) {
+    ItemImage image = null;
+    if (file != null) {
+      image = imageRepository.save(ItemImage.fromMultiPartFile(file));
+    }
+    final Item item = image != null && image.getId() != null ?
+        new Item(newItem.getName(), newItem.getDescription(), newItem.getCategory(), newItem.getCompany(), newItem.getPrice(), image.getId())
+        : new Item(newItem.getName(), newItem.getDescription(), newItem.getCategory(), newItem.getCompany(), newItem.getPrice());
+    final Item saved = itemRepository.save(item);
+
+    return image != null ?
+        saved.dto(image)
+        : saved.dto();
   }
 
   public ItemDto editItem(long id, EditItem editItem) {
@@ -43,7 +54,14 @@ public class ItemService {
 
   public ItemDto getItem(long id) {
     final Item item = getExistingItemById(id);
-    return item.dto();
+    final Long imageId = item.getImageId();
+    if (imageId != null) {
+      final ItemImage image = imageRepository.findById(imageId)
+          .orElseThrow(() -> new IllegalStateException("Image not found"));
+      return item.dto(image);
+    } else {
+      return item.dto();
+    }
   }
 
   private Item getExistingItemById(long id) {

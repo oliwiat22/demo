@@ -20,6 +20,7 @@ class Item {
   private String category;
   private String company;
   private BigDecimal price;
+  private Long imageId;
 
   Item() {
   }
@@ -30,6 +31,15 @@ class Item {
     this.category = category;
     this.company = company;
     this.price = price;
+  }
+
+  public Item(String name, String description, String category, String company, BigDecimal price, Long imageId) {
+    this.name = name;
+    this.description = description;
+    this.category = category;
+    this.company = company;
+    this.price = price;
+    this.imageId = imageId;
   }
 
   Item(Long id, String name, String description, String category, String company, BigDecimal price) {
@@ -43,8 +53,12 @@ class Item {
 
   ItemDto dto() {
     return new ItemDto(
-        id, name, description, category, company, price
-    );
+        id, name, description, category, company, price);
+  }
+
+  ItemDto dto(ItemImage image) {
+    return new ItemDto(
+        id, name, description, category, company, price, image.dto());
   }
 
   void edit(EditItem editItem) {
@@ -59,6 +73,34 @@ class Item {
     if (this.price.compareTo(price) < 0) {
       this.price = price;
     }
+  }
+
+  Long getId() {
+    return id;
+  }
+
+  String getName() {
+    return name;
+  }
+
+  String getDescription() {
+    return description;
+  }
+
+  String getCategory() {
+    return category;
+  }
+
+  String getCompany() {
+    return company;
+  }
+
+  BigDecimal getPrice() {
+    return price;
+  }
+
+  Long getImageId() {
+    return imageId;
   }
 
 }

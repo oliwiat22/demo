@@ -7,6 +7,7 @@ import com.example.demo.item.dto.NewItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequestMapping("/item")
 @RestController
@@ -20,8 +21,8 @@ class ItemController {
   }
 
   @PostMapping("/")
-  ResponseEntity<ItemDto> addItem(@RequestBody NewItem newItem) {
-    final ItemDto item = itemService.addItem(newItem);
+  ResponseEntity<ItemDto> addItem(@RequestBody NewItem newItem, @RequestParam("file") MultipartFile file) {
+    final ItemDto item = itemService.addItem(newItem, file);
     return ResponseEntity.ok(item);
   }
 
