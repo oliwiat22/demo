@@ -10,7 +10,7 @@ public class ItemDto {
   private String category;
   private String company;
   private BigDecimal price;
-  private ImageDto image;
+  private Long imageId;
 
   public ItemDto(Long id, String name, String description, String category, String company, BigDecimal price) {
     this.id = id;
@@ -21,14 +21,14 @@ public class ItemDto {
     this.price = price;
   }
 
-  public ItemDto(Long id, String name, String description, String category, String company, BigDecimal price, ImageDto image) {
+  public ItemDto(Long id, String name, String description, String category, String company, BigDecimal price, Long imageId) {
     this.id = id;
     this.name = name;
     this.description = description;
     this.category = category;
     this.company = company;
     this.price = price;
-    this.image = image;
+    this.imageId = imageId;
   }
 
   public Long getId() {
@@ -55,8 +55,8 @@ public class ItemDto {
     return price;
   }
 
-  public ImageDto getImage() {
-    return image;
+  public Long getImageId() {
+    return imageId;
   }
 
 }

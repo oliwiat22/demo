@@ -9,6 +9,7 @@ public class NewItem {
   private String category;
   private String company;
   private BigDecimal price;
+  private Long imageId;
 
   public NewItem(String name, String description, String category, String company, BigDecimal price) {
     this.name = name;
@@ -16,6 +17,15 @@ public class NewItem {
     this.category = category;
     this.company = company;
     this.price = price;
+  }
+
+  public NewItem(String name, String description, String category, String company, BigDecimal price, Long imageId) {
+    this.name = name;
+    this.description = description;
+    this.category = category;
+    this.company = company;
+    this.price = price;
+    this.imageId = imageId;
   }
 
   public String getName() {
@@ -36,6 +46,10 @@ public class NewItem {
 
   public BigDecimal getPrice() {
     return price;
+  }
+
+  public Long getImageId() {
+    return imageId;
   }
 
 }

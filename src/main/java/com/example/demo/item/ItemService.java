@@ -1,9 +1,6 @@
 package com.example.demo.item;
 
-import com.example.demo.item.dto.EditItem;
-import com.example.demo.item.dto.ItemDto;
-import com.example.demo.item.dto.NewBid;
-import com.example.demo.item.dto.NewItem;
+import com.example.demo.item.dto.*;
 import com.example.demo.item.exception.ItemNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,19 +18,11 @@ public class ItemService {
     this.imageRepository = imageRepository;
   }
 
-  public ItemDto addItem(NewItem newItem, MultipartFile file) {
-    ItemImage image = null;
-    if (file != null) {
-      image = imageRepository.save(ItemImage.fromMultiPartFile(file));
-    }
-    final Item item = image != null && image.getId() != null ?
-        new Item(newItem.getName(), newItem.getDescription(), newItem.getCategory(), newItem.getCompany(), newItem.getPrice(), image.getId())
-        : new Item(newItem.getName(), newItem.getDescription(), newItem.getCategory(), newItem.getCompany(), newItem.getPrice());
-    final Item saved = itemRepository.save(item);
-
-    return image != null ?
-        saved.dto(image)
-        : saved.dto();
+  public ItemDto addItem(NewItem newItem) {
+    final Item item = new Item(
+        newItem.getName(), newItem.getDescription(), newItem.getCategory(), newItem.getCompany(), newItem.getPrice(), newItem.getImageId()
+    );
+    return itemRepository.save(item).dto();
   }
 
   public ItemDto editItem(long id, EditItem editItem) {
@@ -54,19 +43,24 @@ public class ItemService {
 
   public ItemDto getItem(long id) {
     final Item item = getExistingItemById(id);
-    final Long imageId = item.getImageId();
-    if (imageId != null) {
-      final ItemImage image = imageRepository.findById(imageId)
-          .orElseThrow(() -> new IllegalStateException("Image not found"));
-      return item.dto(image);
-    } else {
-      return item.dto();
-    }
+    return item.dto();
   }
 
   private Item getExistingItemById(long id) {
     return itemRepository.findById(id)
         .orElseThrow(() -> new ItemNotFound("Can not find item with an ID: " + id));
+  }
+
+  public ImageDto getImageById(long imageId) {
+    return imageRepository.findById(imageId)
+        .orElseThrow(() -> new IllegalStateException("Image not found"))
+        .dto();
+  }
+
+  public ImageDto storeImage(MultipartFile file) {
+    final ItemImage itemImage = ItemImage.fromMultiPartFile(file);
+    return imageRepository.save(itemImage)
+        .dto();
   }
 
 }

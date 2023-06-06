@@ -53,12 +53,8 @@ class Item {
 
   ItemDto dto() {
     return new ItemDto(
-        id, name, description, category, company, price);
-  }
-
-  ItemDto dto(ItemImage image) {
-    return new ItemDto(
-        id, name, description, category, company, price, image.dto());
+        id, name, description, category, company, price, imageId
+    );
   }
 
   void edit(EditItem editItem) {
