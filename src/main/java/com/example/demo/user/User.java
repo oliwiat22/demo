@@ -1,7 +1,7 @@
 package com.example.demo.user;
 
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity(name = "users")
 class User {

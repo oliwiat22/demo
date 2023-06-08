@@ -57,11 +57,11 @@ public class UserController {
     return  ResponseEntity.notFound().build();
   }
 
-  @PostMapping(value = "/login")
-  ResponseEntity<LoggedUser> login(@RequestBody LogInUser user) {
-    User logged = respository.findByUsername(user.getUsername())
-        .orElseThrow(() -> new IllegalStateException("User not found"));
-    logged.checkPassword(user.getPassword());
-    return ResponseEntity.ok(logged.dto());
-  }
+//  @PostMapping(value = "/login")
+//  ResponseEntity<LoggedUser> login(@RequestBody LogInUser user) {
+//    User logged = respository.findByUsername(user.getUsername())
+//        .orElseThrow(() -> new IllegalStateException("User not found"));
+//    logged.checkPassword(user.getPassword());
+//    return ResponseEntity.ok(logged.dto());
+//  }
 }

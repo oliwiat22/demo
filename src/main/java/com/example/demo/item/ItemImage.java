@@ -1,7 +1,7 @@
 package com.example.demo.item;
 
 import com.example.demo.item.dto.ImageDto;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -46,7 +46,7 @@ class ItemImage {
     this.data = data;
   }
 
-  static ItemImage fromMultiPartFile(MultipartFile file)  {
+  static ItemImage fromMultiPartFile(MultipartFile file) {
     try {
       return new ItemImage(getCleanFileName(file), file.getContentType(), file.getBytes());
     } catch (IOException e) {
